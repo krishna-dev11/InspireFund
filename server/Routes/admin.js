@@ -1,5 +1,5 @@
 ﻿const express = require('express');
-const { body } = require('express-validator');
+const { body, param } = require('express-validator');
 const AdminController = require('../Controllers/AdminController');
 const validate = require('../Middlewares/validate');
 const { requireAuth, requireAdmin } = require('../Middlewares/auth');
@@ -15,6 +15,33 @@ router.post(
   [body('amount').isNumeric().toFloat().custom((v) => v > 0)],
   validate,
   AdminController.withdraw
+);
+
+// 🔥 NEW ROUTES
+
+router.get(
+  '/pending-campaigns',
+  requireAuth,
+  requireAdmin,
+  AdminController.getPendingCampaigns
+);
+
+router.patch(
+  '/approve/:id',
+  requireAuth,
+  requireAdmin,
+  [param('id').isMongoId()],
+  validate,
+  AdminController.approveCampaign
+);
+
+router.patch(
+  '/reject/:id',
+  requireAuth,
+  requireAdmin,
+  [param('id').isMongoId()],
+  validate,
+  AdminController.rejectCampaign
 );
 
 module.exports = router;

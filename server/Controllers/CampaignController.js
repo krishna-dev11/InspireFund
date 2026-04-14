@@ -2,7 +2,10 @@
 const CampaignService = require('../Services/CampaignService');
 
 const createCampaign = asyncHandler(async (req, res) => {
-  const { title, description, category, targetAmount, deadline, durationDays, image, tags } = req.body;
+  const { title, description, category, targetAmount, deadline, durationDays, tags } = req.body;
+
+  const image = req.file?.path || '';
+
   const campaign = await CampaignService.createCampaign({
     title,
     description,
@@ -14,7 +17,36 @@ const createCampaign = asyncHandler(async (req, res) => {
     tags,
     creatorId: req.user.id
   });
+
   res.status(201).json({ campaign });
+});
+
+const updateCampaign = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const image = req.file?.path;
+
+  const campaign = await CampaignService.updateCampaign({
+    campaignId: id,
+    userId: req.user.id,
+    userRole: req.user.role,
+    updates: req.body,
+    image
+  });
+
+  res.json({ campaign });
+});
+
+const deleteCampaign = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  await CampaignService.deleteCampaign({
+    campaignId: id,
+    userId: req.user.id,
+    userRole: req.user.role
+  });
+
+  res.json({ message: 'Campaign deleted successfully' });
 });
 
 const getCampaigns = asyncHandler(async (req, res) => {
@@ -35,6 +67,8 @@ const getCampaignContributions = asyncHandler(async (req, res) => {
 
 module.exports = {
   createCampaign,
+  updateCampaign,
+  deleteCampaign,
   getCampaigns,
   getCampaignById,
   getCampaignContributions

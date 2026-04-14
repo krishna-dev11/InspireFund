@@ -10,7 +10,13 @@ const CampaignSchema = new mongoose.Schema(
     contributors: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     deadline: { type: Date, required: true },
     image: { type: String, default: '' },
-    status: { type: String, enum: ['pending', 'active', 'completed', 'ended'], default: 'active' },
+
+    status: { 
+      type: String, 
+      enum: ['pending', 'active', 'completed', 'rejected', 'ended'], 
+      default: 'pending' 
+    },
+
     creator: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     tags: [{ type: String }]
   },
