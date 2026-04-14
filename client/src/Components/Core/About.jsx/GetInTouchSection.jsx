@@ -1,6 +1,7 @@
 import React from "react";
 import { Phone, MapPin, Clock, Sparkles } from "lucide-react";
 import ContactForm from "./ContactForm";
+import { FiArrowRight } from "react-icons/fi";
 
 const ContactInfoCard = ({ icon: Icon, title, detail }) => (
   <div className="flex items-center justify-between p-5 border border-app rounded-[1.5rem] bg-surface hover:border-[#F97316]/50 transition-all duration-500 group cursor-pointer w-full backdrop-blur-sm">
@@ -18,7 +19,7 @@ const ContactInfoCard = ({ icon: Icon, title, detail }) => (
       </div>
     </div>
     <div className="w-9 h-9 rounded-full flex items-center justify-center border border-app bg-white/5 group-hover:bg-[#F97316] group-hover:text-black transition-all duration-500 shrink-0 ml-4 shadow-lg">
-      >
+      <FiArrowRight />
     </div>
   </div>
 );
