@@ -14,16 +14,18 @@ function ProfilePanel() {
     dispatch(getProfileStats());
   }, [dispatch]);
 
+  const roleLabel = user?.role === "admin" ? "Admin" : user?.role === "creator" ? "Creator" : "Supporter";
+
   return (
     <div className="max-w-2xl mx-auto">
-      <div className="bg-gradient-to-r from-indigo-600 to-violet-700 rounded-2xl p-8 text-white text-center mb-6">
-        <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center text-3xl font-black mx-auto mb-3">
+      <div className="app-card p-8 text-center mb-6">
+        <div className="w-20 h-20 bg-[#F97316]/15 rounded-full flex items-center justify-center text-3xl font-black mx-auto mb-3 text-[#F97316] border border-app">
           {user?.name?.[0]}
         </div>
-        <h1 className="text-2xl font-black">{user?.name}</h1>
-        <p className="text-indigo-200 text-sm">{user?.email}</p>
-        <span className="mt-2 inline-block bg-white/20 text-white text-xs px-3 py-1 rounded-full font-semibold">
-          {user?.role === "admin" ? "?? Admin" : user?.role === "creator" ? "?? Creator" : "?? Supporter"}
+        <h1 className="text-2xl font-black text-app">{user?.name}</h1>
+        <p className="text-muted text-sm">{user?.email}</p>
+        <span className="mt-2 inline-block bg-[#F97316]/15 text-[#F97316] text-xs px-3 py-1 rounded-full font-semibold">
+          {roleLabel}
         </span>
       </div>
       {profileStats && (
@@ -34,17 +36,17 @@ function ProfilePanel() {
           <StatCard icon={Star} label="Campaigns Backed" value={profileStats.backed} color="emerald" />
         </div>
       )}
-      <div className="bg-white border border-gray-100 rounded-2xl p-6 space-y-3">
-        <h2 className="font-bold text-gray-900 mb-4">Account Info</h2>
+      <div className="app-card p-6 space-y-3">
+        <h2 className="font-bold text-app mb-4">Account Info</h2>
         {[
           { label: "Full Name", value: user?.name },
           { label: "Email", value: user?.email },
           { label: "Role", value: user?.role },
           { label: "User ID", value: user?.id },
         ].map(({ label, value }) => (
-          <div key={label} className="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
-            <span className="text-sm text-gray-500">{label}</span>
-            <span className="text-sm font-semibold text-gray-800 font-mono text-xs">{value}</span>
+          <div key={label} className="flex items-center justify-between py-2 border-b border-app last:border-0">
+            <span className="text-sm text-muted">{label}</span>
+            <span className="text-sm font-semibold text-app font-mono text-xs">{value}</span>
           </div>
         ))}
       </div>

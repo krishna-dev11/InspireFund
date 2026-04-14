@@ -7,7 +7,7 @@ function Admin() {
 
   if (user?.role !== "admin") {
     return (
-      <div className="text-center py-20 text-gray-400">
+      <div className="text-center py-20 text-muted">
         <Lock size={40} className="mx-auto mb-3 opacity-30" />
         <p className="font-semibold">Admin access only</p>
       </div>

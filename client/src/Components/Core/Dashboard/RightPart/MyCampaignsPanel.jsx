@@ -34,8 +34,8 @@ function MyCampaignsPanel() {
 
   return (
     <div>
-      <h1 className="text-2xl font-black text-gray-900 mb-1">My Campaigns</h1>
-      <p className="text-gray-500 text-sm mb-6">Campaigns you've created</p>
+      <h1 className="text-2xl font-black text-app mb-1">My Campaigns</h1>
+      <p className="text-muted text-sm mb-6">Campaigns you have created</p>
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <StatCard icon={Rocket} label="Total Created" value={userCampaigns.length} color="indigo" />
         <StatCard icon={IndianRupee} label="Total Raised" value={formatCurrency(totalRaised)} color="amber" />
@@ -47,10 +47,10 @@ function MyCampaignsPanel() {
           <Spinner size={32} />
         </div>
       ) : userCampaigns.length === 0 ? (
-        <div className="text-center py-20 text-gray-400">
+        <div className="text-center py-20 text-muted">
           <FolderHeart size={40} className="mx-auto mb-3 opacity-30" />
           <p className="font-semibold">No campaigns yet</p>
-          <p className="text-sm">Create your first campaign!</p>
+          <p className="text-sm">Create your first campaign.</p>
         </div>
       ) : (
         <div className="space-y-4">
@@ -59,19 +59,19 @@ function MyCampaignsPanel() {
             const days = daysLeft(c.deadline);
             const canWithdraw = days === 0 || c.status === "completed";
             return (
-              <div key={c._id} className="bg-white border border-gray-100 rounded-2xl p-5 hover:shadow-md transition-all">
+              <div key={c._id} className="app-card p-5 transition-all">
                 <div className="flex items-start gap-4">
-                  <div className="w-14 h-14 bg-gradient-to-br from-indigo-50 to-violet-50 rounded-xl flex items-center justify-center shrink-0 overflow-hidden">
-                    {c.image ? <img src={c.image} alt="" className="w-full h-full object-cover" /> : <Rocket size={22} className="text-indigo-300" />}
+                  <div className="w-14 h-14 bg-[#F97316]/10 rounded-xl flex items-center justify-center shrink-0 overflow-hidden border border-app">
+                    {c.image ? <img src={c.image} alt="" className="w-full h-full object-cover" /> : <Rocket size={22} className="text-[#F97316]" />}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap mb-1">
-                      <h3 className="font-bold text-gray-900">{c.title}</h3>
+                      <h3 className="font-bold text-app">{c.title}</h3>
                       <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${getStatusColor(c.status)}`}>{c.status}</span>
                     </div>
-                    <div className="flex items-center gap-4 text-sm text-gray-600 mb-2">
-                      <span className="font-bold text-gray-800">
-                        {formatCurrency(c.raisedAmount)} <span className="text-gray-400 font-normal">/ {formatCurrency(c.targetAmount)}</span>
+                    <div className="flex items-center gap-4 text-sm text-muted mb-2 flex-wrap">
+                      <span className="font-bold text-app">
+                        {formatCurrency(c.raisedAmount)} <span className="text-muted font-normal">/ {formatCurrency(c.targetAmount)}</span>
                       </span>
                       <span>·</span>
                       <span>{c.contributors?.length ?? 0} backers</span>
@@ -86,23 +86,23 @@ function MyCampaignsPanel() {
                         dispatch(setSelectedCampaign(c));
                         navigate(`/dashboard/campaigns/${c._id}`);
                       }}
-                      className="flex items-center gap-1.5 text-xs bg-indigo-50 text-indigo-600 px-3 py-1.5 rounded-lg font-semibold hover:bg-indigo-100 transition-all"
+                      className="flex items-center gap-1.5 text-xs bg-white/5 text-app px-3 py-1.5 rounded-lg font-semibold border border-app hover:bg-[#F97316]/15 transition-all"
                     >
                       <Eye size={13} /> View
                     </button>
                     {canWithdraw ? (
                       <button
                         onClick={() =>
-                          showToast(`Withdrawal of ${formatCurrency(Math.round(c.raisedAmount * 0.95))} initiated! (Backend payout needed)`, "success")
+                          showToast(`Withdrawal of ${formatCurrency(Math.round(c.raisedAmount * 0.95))} initiated. (Backend payout needed)`, "success")
                         }
-                        className="flex items-center gap-1.5 text-xs bg-emerald-50 text-emerald-600 px-3 py-1.5 rounded-lg font-semibold hover:bg-emerald-100 transition-all"
+                        className="flex items-center gap-1.5 text-xs bg-emerald-500/15 text-emerald-400 px-3 py-1.5 rounded-lg font-semibold hover:bg-emerald-500/25 transition-all"
                       >
                         <Download size={13} /> Withdraw
                       </button>
                     ) : (
                       <button
                         onClick={() => handleDelete(c._id)}
-                        className="flex items-center gap-1.5 text-xs bg-red-50 text-red-500 px-3 py-1.5 rounded-lg font-semibold hover:bg-red-100 transition-all"
+                        className="flex items-center gap-1.5 text-xs bg-red-500/15 text-red-400 px-3 py-1.5 rounded-lg font-semibold hover:bg-red-500/25 transition-all"
                       >
                         <Trash2 size={13} /> Delete
                       </button>

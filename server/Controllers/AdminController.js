@@ -1,6 +1,7 @@
 ﻿const asyncHandler = require('../Utils/asyncHandler');
 const AdminService = require('../Services/AdminService');
 const Campaign = require('../Models/Campaign');
+const PlatformService = require('../Services/PlatformService');
 
 const getStats = asyncHandler(async (_req, res) => {
   const stats = await AdminService.getStats();
@@ -49,10 +50,23 @@ const rejectCampaign = asyncHandler(async (req, res) => {
   res.json({ message: 'Campaign rejected', campaign });
 });
 
+const getPlatformSettings = asyncHandler(async (_req, res) => {
+  const settings = await PlatformService.getSettings();
+  res.json({ settings });
+});
+
+const updatePlatformSettings = asyncHandler(async (req, res) => {
+  const { isPaused } = req.body;
+  const settings = await PlatformService.setPaused(isPaused);
+  res.json({ settings });
+});
+
 module.exports = {
   getStats,
   withdraw,
   getPendingCampaigns,
   approveCampaign,
-  rejectCampaign
+  rejectCampaign,
+  getPlatformSettings,
+  updatePlatformSettings
 };

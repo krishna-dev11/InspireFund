@@ -21,16 +21,15 @@ import {
 import StatCard from "../../../Common/StatCard";
 import Spinner from "../../../Common/Spinner";
 import formatCurrency, { formatNumber } from "../../../../Utilities/formatCurrency";
-import showToast from "../../../../Utilities/showToast";
-import { approveCampaign, getAdminData, rejectCampaign, withdrawPlatformFees } from "../../../../Services/Operations/profileAPI";
+import { approveCampaign, getAdminData, rejectCampaign, updateAdminSettings, withdrawPlatformFees } from "../../../../Services/Operations/profileAPI";
 import { setPendingCampaigns } from "../../../../Slices/profileSlice";
 
 function AdminPanel() {
   const dispatch = useDispatch();
-  const { adminStats, pendingCampaigns, adminLoading } = useSelector((state) => state.profile);
+  const { adminStats, pendingCampaigns, adminLoading, adminSettings } = useSelector((state) => state.profile);
   const [withdrawAmount, setWithdrawAmount] = useState("");
-  const [paused, setPaused] = useState(false);
   const [actionLoading, setActionLoading] = useState({});
+  const paused = adminSettings?.isPaused ?? false;
 
   useEffect(() => {
     dispatch(getAdminData());
@@ -77,15 +76,15 @@ function AdminPanel() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-black text-gray-900">Admin Panel</h1>
-          <p className="text-gray-500 text-sm mt-0.5">Full platform control · Live data from MongoDB</p>
+          <h1 className="text-2xl font-black text-app">Admin Panel</h1>
+          <p className="text-muted text-sm mt-0.5">Full platform control - Live data from MongoDB</p>
         </div>
         <div
           className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold ${
-            paused ? "bg-red-100 text-red-600" : "bg-emerald-100 text-emerald-600"
+            paused ? "bg-red-500/15 text-red-400" : "bg-emerald-500/15 text-emerald-400"
           }`}
         >
-          <div className={`w-2 h-2 rounded-full ${paused ? "bg-red-500" : "bg-emerald-500"}`} />
+          <div className={`w-2 h-2 rounded-full ${paused ? "bg-red-400" : "bg-emerald-400"}`} />
           Platform {paused ? "Paused" : "Active"}
         </div>
       </div>
@@ -108,49 +107,49 @@ function AdminPanel() {
             />
           </div>
 
-          <div className="bg-white border border-gray-100 rounded-2xl p-6 mb-6">
+          <div className="app-card p-6 mb-6">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center">
+              <div className="w-10 h-10 bg-[#F97316]/15 text-[#F97316] rounded-xl flex items-center justify-center">
                 <FileText size={18} />
               </div>
               <div>
-                <h2 className="font-bold text-gray-900">Pending Approvals</h2>
-                <p className="text-xs text-gray-400">
+                <h2 className="font-bold text-app">Pending Approvals</h2>
+                <p className="text-xs text-muted">
                   {pendingCampaigns.length} campaign{pendingCampaigns.length !== 1 ? "s" : ""} awaiting review
                 </p>
               </div>
             </div>
             {pendingCampaigns.length === 0 ? (
-              <div className="text-center py-8 text-gray-400 text-sm">
+              <div className="text-center py-8 text-muted text-sm">
                 <CheckCircle size={28} className="mx-auto mb-2 opacity-30" />
-                <p>All caught up! No pending campaigns.</p>
+                <p>All caught up. No pending campaigns.</p>
               </div>
             ) : (
               <div className="space-y-3">
                 {pendingCampaigns.map((c) => (
-                  <div key={c._id} className="border border-gray-100 rounded-xl p-4 flex items-start gap-4 hover:bg-gray-50 transition-all">
-                    <div className="w-12 h-12 bg-gradient-to-br from-indigo-50 to-violet-50 rounded-xl flex items-center justify-center shrink-0 overflow-hidden">
-                      {c.image ? <img src={c.image} alt="" className="w-full h-full object-cover" /> : <Rocket size={18} className="text-indigo-300" />}
+                  <div key={c._id} className="app-card p-4 flex items-start gap-4 transition-all">
+                    <div className="w-12 h-12 bg-[#F97316]/10 rounded-xl flex items-center justify-center shrink-0 overflow-hidden border border-app">
+                      {c.image ? <img src={c.image} alt="" className="w-full h-full object-cover" /> : <Rocket size={18} className="text-[#F97316]" />}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-bold text-gray-900 truncate">{c.title}</h3>
-                      <p className="text-xs text-gray-500 mt-0.5">
-                        by {c.creator?.name} · {c.category} · Goal: {formatCurrency(c.targetAmount)}
+                      <h3 className="font-bold text-app truncate">{c.title}</h3>
+                      <p className="text-xs text-muted mt-0.5">
+                        by {c.creator?.name} - {c.category} - Goal: {formatCurrency(c.targetAmount)}
                       </p>
-                      <p className="text-xs text-gray-400 mt-1 line-clamp-1">{c.description}</p>
+                      <p className="text-xs text-muted mt-1 line-clamp-1">{c.description}</p>
                     </div>
                     <div className="flex gap-2 shrink-0">
                       <button
                         onClick={() => handleApprove(c._id)}
                         disabled={!!actionLoading[c._id]}
-                        className="flex items-center gap-1 text-xs bg-emerald-50 text-emerald-600 px-3 py-1.5 rounded-lg font-semibold hover:bg-emerald-100 disabled:opacity-50 transition-all"
+                        className="flex items-center gap-1 text-xs bg-emerald-500/15 text-emerald-400 px-3 py-1.5 rounded-lg font-semibold hover:bg-emerald-500/25 disabled:opacity-50 transition-all"
                       >
                         {actionLoading[c._id] === "approve" ? <Spinner size={12} /> : <CheckSquare size={12} />} Approve
                       </button>
                       <button
                         onClick={() => handleReject(c._id)}
                         disabled={!!actionLoading[c._id]}
-                        className="flex items-center gap-1 text-xs bg-red-50 text-red-500 px-3 py-1.5 rounded-lg font-semibold hover:bg-red-100 disabled:opacity-50 transition-all"
+                        className="flex items-center gap-1 text-xs bg-red-500/15 text-red-400 px-3 py-1.5 rounded-lg font-semibold hover:bg-red-500/25 disabled:opacity-50 transition-all"
                       >
                         {actionLoading[c._id] === "reject" ? <Spinner size={12} /> : <XCircle size={12} />} Reject
                       </button>
@@ -162,64 +161,61 @@ function AdminPanel() {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-            <div className="bg-white border border-gray-100 rounded-2xl p-6">
+            <div className="app-card p-6">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center">
+                <div className="w-10 h-10 bg-[#F97316]/15 text-[#F97316] rounded-xl flex items-center justify-center">
                   <Wallet size={18} />
                 </div>
                 <div>
-                  <h2 className="font-bold text-gray-900">Fee Management</h2>
-                  <p className="text-xs text-gray-400">Withdraw accumulated platform earnings</p>
+                  <h2 className="font-bold text-app">Fee Management</h2>
+                  <p className="text-xs text-muted">Withdraw accumulated platform earnings</p>
                 </div>
               </div>
-              <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 mb-4">
-                <p className="text-xs text-amber-600">Available to withdraw (5% commission)</p>
-                <p className="text-2xl font-black text-amber-700">{formatCurrency(adminStats?.platformEarnings ?? platformEarnings)}</p>
+              <div className="bg-[#F97316]/10 border border-app rounded-xl p-3 mb-4">
+                <p className="text-xs text-muted">Available to withdraw (5% commission)</p>
+                <p className="text-2xl font-black text-[#F97316]">{formatCurrency(adminStats?.platformEarnings ?? platformEarnings)}</p>
               </div>
               <div className="relative mb-3">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 font-bold text-gray-500 text-sm">?</span>
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 font-bold text-muted text-sm">Rs</span>
                 <input
                   type="number"
                   value={withdrawAmount}
                   onChange={(e) => setWithdrawAmount(e.target.value)}
                   placeholder="Enter withdraw amount"
-                  className="w-full pl-7 border-2 border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:border-amber-400 outline-none"
+                  className="w-full pl-10 pr-4 py-2.5 input-base text-sm"
                 />
               </div>
               <button
                 onClick={handleWithdraw}
-                className="w-full bg-gradient-to-r from-amber-500 to-orange-500 text-white py-2.5 rounded-xl font-bold hover:opacity-90 transition-all"
+                className="w-full btn-primary py-2.5"
               >
-                Withdraw Fees ?
+                Withdraw Fees
               </button>
             </div>
 
-            <div className="bg-white border border-gray-100 rounded-2xl p-6">
+            <div className="app-card p-6">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center">
+                <div className="w-10 h-10 bg-white/5 text-app rounded-xl flex items-center justify-center border border-app">
                   <Settings size={18} />
                 </div>
                 <div>
-                  <h2 className="font-bold text-gray-900">Platform Controls</h2>
-                  <p className="text-xs text-gray-400">System-wide management</p>
+                  <h2 className="font-bold text-app">Platform Controls</h2>
+                  <p className="text-xs text-muted">System-wide management</p>
                 </div>
               </div>
               <div className="space-y-3">
                 <button
-                  onClick={() => {
-                    setPaused(!paused);
-                    showToast(`Platform ${!paused ? "paused" : "resumed"}`, paused ? "success" : "info");
-                  }}
+                  onClick={() => dispatch(updateAdminSettings({ isPaused: !paused }))}
                   className={`w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold text-sm transition-all ${
-                    paused ? "bg-emerald-50 text-emerald-700 hover:bg-emerald-100" : "bg-amber-50 text-amber-700 hover:bg-amber-100"
+                    paused ? "bg-emerald-500/15 text-emerald-400" : "bg-[#F97316]/15 text-[#F97316]"
                   }`}
                 >
                   <span className="flex items-center gap-2">{paused ? <Play size={16} /> : <Pause size={16} />}{paused ? "Resume Platform" : "Pause Platform"}</span>
                   <ChevronRight size={14} />
                 </button>
                 <button
-                  onClick={() => showToast("Emergency action logged", "error")}
-                  className="w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold text-sm bg-red-50 text-red-600 hover:bg-red-100 transition-all"
+                  onClick={() => dispatch(withdrawPlatformFees(adminStats?.platformEarnings ?? platformEarnings))}
+                  className="w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold text-sm bg-red-500/15 text-red-400 transition-all"
                 >
                   <span className="flex items-center gap-2">
                     <AlertCircle size={16} /> Emergency Withdraw
@@ -228,7 +224,7 @@ function AdminPanel() {
                 </button>
                 <button
                   onClick={() => dispatch(getAdminData())}
-                  className="w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold text-sm bg-gray-50 text-gray-700 hover:bg-gray-100 transition-all"
+                  className="w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold text-sm bg-white/5 text-app border border-app transition-all"
                 >
                   <span className="flex items-center gap-2">
                     <RefreshCw size={16} /> Refresh Stats
@@ -239,7 +235,7 @@ function AdminPanel() {
             </div>
           </div>
 
-          <div className="bg-gradient-to-r from-indigo-900 to-violet-900 rounded-2xl p-6 text-white">
+          <div className="bg-surface-2 border border-app rounded-2xl p-6 text-app">
             <h2 className="font-bold mb-4 flex items-center gap-2">
               <Activity size={16} /> System Status
             </h2>
@@ -252,9 +248,9 @@ function AdminPanel() {
                 { label: "Auth", value: "JWT + bcrypt" },
                 { label: "Platform Fee", value: "5% per transaction" },
               ].map(({ label, value }) => (
-                <div key={label} className="bg-white/10 rounded-xl p-3">
-                  <p className="text-indigo-300 text-xs">{label}</p>
-                  <p className="text-white font-semibold text-sm mt-0.5">{value}</p>
+                <div key={label} className="bg-white/5 rounded-xl p-3 border border-app">
+                  <p className="text-muted text-xs">{label}</p>
+                  <p className="text-app font-semibold text-sm mt-0.5">{value}</p>
                   <div className="flex items-center gap-1 mt-1">
                     <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full" />
                     <span className="text-emerald-400 text-xs">online</span>
@@ -270,3 +266,4 @@ function AdminPanel() {
 }
 
 export default AdminPanel;
+

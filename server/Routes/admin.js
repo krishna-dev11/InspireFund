@@ -44,4 +44,15 @@ router.patch(
   AdminController.rejectCampaign
 );
 
+router.get('/settings', requireAuth, requireAdmin, AdminController.getPlatformSettings);
+
+router.patch(
+  '/settings',
+  requireAuth,
+  requireAdmin,
+  [body('isPaused').isBoolean()],
+  validate,
+  AdminController.updatePlatformSettings
+);
+
 module.exports = router;

@@ -6,6 +6,7 @@ const initialState = {
   userContributions: [],
   profileStats: null,
   adminStats: null,
+  adminSettings: { isPaused: false },
   pendingCampaigns: [],
   adminLoading: false,
   adminActionLoading: {},
@@ -30,6 +31,9 @@ const profileSlice = createSlice({
     setAdminStats(state, action) {
       state.adminStats = action.payload;
     },
+    setAdminSettings(state, action) {
+      state.adminSettings = action.payload;
+    },
     setPendingCampaigns(state, action) {
       state.pendingCampaigns = action.payload;
     },
@@ -44,6 +48,7 @@ const profileSlice = createSlice({
       state.userContributions = [];
       state.profileStats = null;
       state.adminStats = null;
+      state.adminSettings = { isPaused: false };
       state.pendingCampaigns = [];
       state.adminLoading = false;
       state.adminActionLoading = {};
@@ -57,6 +62,7 @@ export const {
   setUserContributions,
   setProfileStats,
   setAdminStats,
+  setAdminSettings,
   setPendingCampaigns,
   setAdminLoading,
   setAdminActionLoading,

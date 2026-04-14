@@ -6,6 +6,7 @@ import {
   setUserContributions,
   setProfileStats,
   setAdminStats,
+  setAdminSettings,
   setPendingCampaigns,
   setAdminLoading,
 } from "../../Slices/profileSlice";
@@ -20,6 +21,7 @@ const {
   ADMIN_WITHDRAW_API,
   ADMIN_APPROVE_API,
   ADMIN_REJECT_API,
+  ADMIN_SETTINGS_API,
 } = endpoints;
 
 export function getUserCampaigns() {
@@ -87,20 +89,37 @@ export function getAdminData() {
   return async (dispatch) => {
     dispatch(setAdminLoading(true));
     try {
-      const [sRes, pRes] = await Promise.all([
+      const [sRes, pRes, settingsRes] = await Promise.all([
         apiConnector("GET", ADMIN_STATS_API),
         apiConnector("GET", ADMIN_PENDING_API),
+        apiConnector("GET", ADMIN_SETTINGS_API),
       ]);
       dispatch(setAdminStats(sRes.data));
       dispatch(setPendingCampaigns(pRes.data.campaigns || []));
+      dispatch(setAdminSettings(settingsRes.data.settings || { isPaused: false }));
       return { stats: sRes.data, pending: pRes.data.campaigns || [] };
     } catch (error) {
       showToast(error.response?.data?.message || "Failed to load admin data", "error");
       dispatch(setAdminStats(null));
       dispatch(setPendingCampaigns([]));
+      dispatch(setAdminSettings({ isPaused: false }));
       return null;
     } finally {
       dispatch(setAdminLoading(false));
+    }
+  };
+}
+
+export function updateAdminSettings(payload) {
+  return async (dispatch) => {
+    try {
+      const { data } = await apiConnector("PATCH", ADMIN_SETTINGS_API, payload);
+      dispatch(setAdminSettings(data.settings));
+      showToast(data.settings?.isPaused ? "Platform paused" : "Platform resumed", "info");
+      return data.settings;
+    } catch (error) {
+      showToast(error.response?.data?.message || "Failed to update platform settings", "error");
+      return null;
     }
   };
 }
@@ -109,7 +128,7 @@ export function withdrawPlatformFees(amount) {
   return async () => {
     try {
       await apiConnector("POST", ADMIN_WITHDRAW_API, { amount: Number(amount) });
-      showToast(`\u20B9${formatNumber(Number(amount))} platform earnings withdrawn!`, "success");
+      showToast(`Rs ${formatNumber(Number(amount))} platform earnings withdrawn!`, "success");
       return true;
     } catch (error) {
       showToast(error.response?.data?.message || "Withdrawal failed", "error");

@@ -27,18 +27,18 @@ function Sidebar() {
 
   return (
     <aside
-      className={`fixed left-0 top-0 h-screen bg-gradient-to-b from-indigo-950 to-indigo-900 flex flex-col z-30 transition-all duration-300 ${
+      className={`fixed left-0 top-0 h-screen bg-surface-2 border-r border-app flex flex-col z-30 transition-all duration-300 ${
         sidebarCollapsed ? "w-16" : "w-60"
       }`}
     >
-      <div className="flex items-center gap-3 px-4 py-5 border-b border-indigo-800">
-        <div className="w-8 h-8 bg-amber-400 rounded-lg flex items-center justify-center shrink-0">
-          <IndianRupee size={16} className="text-indigo-900" />
+      <div className="flex items-center gap-3 px-4 py-5 border-b border-app">
+        <div className="w-8 h-8 bg-[#F97316]/20 rounded-lg flex items-center justify-center shrink-0">
+          <IndianRupee size={16} className="text-[#F97316]" />
         </div>
-        {!sidebarCollapsed && <span className="font-black text-white text-lg tracking-tight">FundIndia</span>}
+        {!sidebarCollapsed && <span className="font-black text-app text-lg tracking-tight">Inspirefund</span>}
         <button
           onClick={() => dispatch(setSidebarCollapsed(!sidebarCollapsed))}
-          className={`ml-auto text-indigo-400 hover:text-white ${sidebarCollapsed ? "mx-auto" : ""}`}
+          className={`ml-auto text-muted hover:text-[#F97316] ${sidebarCollapsed ? "mx-auto" : ""}`}
         >
           <Menu size={18} />
         </button>
@@ -56,22 +56,22 @@ function Sidebar() {
           />
         ))}
       </nav>
-      <div className="border-t border-indigo-800 p-4">
+      <div className="border-t border-app p-4">
         {!sidebarCollapsed ? (
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-indigo-700 rounded-full flex items-center justify-center text-white text-xs font-bold">
+            <div className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center text-app text-xs font-bold border border-app">
               {user?.name?.[0] || "U"}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-white text-xs font-semibold truncate">{user?.name}</p>
-              <p className="text-indigo-400 text-xs truncate">{user?.role}</p>
+              <p className="text-app text-xs font-semibold truncate">{user?.name}</p>
+              <p className="text-muted text-xs truncate">{user?.role}</p>
             </div>
-            <button onClick={handleLogout} className="text-indigo-400 hover:text-red-400 transition-colors">
+            <button onClick={handleLogout} className="text-muted hover:text-red-400 transition-colors">
               <LogOut size={15} />
             </button>
           </div>
         ) : (
-          <button onClick={handleLogout} className="text-indigo-400 hover:text-red-400 mx-auto block">
+          <button onClick={handleLogout} className="text-muted hover:text-red-400 mx-auto block">
             <LogOut size={18} />
           </button>
         )}
@@ -81,3 +81,4 @@ function Sidebar() {
 }
 
 export default Sidebar;
+

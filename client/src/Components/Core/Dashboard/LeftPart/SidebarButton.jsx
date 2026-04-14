@@ -10,8 +10,8 @@ function SidebarButton({ to, label, icon: Icon, admin, collapsed, end }) {
       onClick={() => navigate(to)}
       className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm font-medium transition-all ${
         isActive
-          ? "bg-white/10 text-white border-r-2 border-amber-400"
-          : "text-indigo-300 hover:bg-white/5 hover:text-white"
+          ? "bg-[#F97316]/10 text-app border-r-2 border-[#F97316]"
+          : "text-muted hover:bg-white/5 hover:text-app"
       } ${collapsed ? "justify-center" : ""}`}
       title={collapsed ? label : ""}
       type="button"

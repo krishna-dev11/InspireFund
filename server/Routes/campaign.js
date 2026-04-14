@@ -3,6 +3,7 @@ const { body, query, param } = require('express-validator');
 const CampaignController = require('../Controllers/CampaignController');
 const validate = require('../Middlewares/validate');
 const { requireAuth } = require('../Middlewares/auth');
+const { requirePlatformActive } = require('../Middlewares/platform');
 const upload = require('../Middlewares/upload');
 
 const router = express.Router();
@@ -11,6 +12,7 @@ const router = express.Router();
 router.post(
   '/create',
   requireAuth,
+  requirePlatformActive,
   upload.single('image'),
   [
     body('title').trim().notEmpty(),

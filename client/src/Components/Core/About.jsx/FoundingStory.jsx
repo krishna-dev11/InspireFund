@@ -7,7 +7,7 @@ const platformStory = [
     type: "Text",
     heading: "Built for creators, trusted by backers",
     description1:
-      "FundIndia started with a simple mission: remove friction between bold ideas and the people willing to support them. Whether you are funding a startup, a social cause, or a community project, we help you launch with clarity and confidence.",
+      "Inspirefund started with a simple mission: remove friction between bold ideas and the people willing to support them. Whether you are funding a startup, a social cause, or a community project, we help you launch with clarity and confidence.",
     description2:
       "Our platform focuses on secure payments, transparent milestones, and real-time updates so supporters always know where their money goes. That trust is what turns one-time backers into long-term believers.",
   },
@@ -23,7 +23,7 @@ const FoundingStory = () => {
   return (
     <div className="relative w-full py-24 overflow-hidden">
       <div className="absolute top-0 right-[-5%] select-none pointer-events-none z-0">
-        <h2 className="text-[12rem] md:text-[18rem] font-black tracking-tighter uppercase leading-none text-white/[0.015]">
+        <h2 className="text-[12rem] md:text-[18rem] font-black tracking-tighter uppercase leading-none text-black/5 dark:text-white/5">
           JOURNEY
         </h2>
       </div>
@@ -38,10 +38,10 @@ const FoundingStory = () => {
               >
                 <div className="absolute -inset-4 rounded-[3rem] blur-3xl opacity-50 group-hover:opacity-80 transition duration-1000 bg-gradient-to-r from-[#F97316]/20 to-transparent"></div>
 
-                <div className="relative p-3 border border-[#1F2937] rounded-[2.5rem] bg-[#0A0A0A] backdrop-blur-sm shadow-2xl overflow-hidden">
+                <div className="relative p-3 border border-app rounded-[2.5rem] bg-surface backdrop-blur-sm shadow-2xl overflow-hidden">
                   <img
                     src={story.imageUrl}
-                    alt="FundIndia community"
+                    alt="Inspirefund community"
                     className="w-full max-w-[500px] rounded-[2rem] object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-1000 transform group-hover:scale-105"
                   />
                 </div>
@@ -49,7 +49,7 @@ const FoundingStory = () => {
             ) : (
               <div
                 key={story.id}
-                className="flex flex-col gap-8 p-8 md:p-14 border border-[#111111] rounded-[3rem] shadow-inner relative overflow-hidden bg-[#050505]"
+                className="flex flex-col gap-8 p-8 md:p-14 border border-app rounded-[3rem] shadow-inner relative overflow-hidden bg-surface"
               >
                 <div className="flex flex-col gap-4">
                   <div className="w-20 h-1.5 rounded-full mb-2 bg-gradient-to-r from-[#F97316] to-[#FFD700]"></div>
@@ -60,7 +60,7 @@ const FoundingStory = () => {
                 </div>
 
                 <div className="flex flex-col gap-8">
-                  <p className="text-gray-400 text-lg leading-relaxed font-light italic">
+                  <p className="text-muted text-lg leading-relaxed font-light italic">
                     {story.description1}
                   </p>
                   <p className="text-[#F97316] text-base md:text-lg leading-relaxed border-l-4 pl-8 py-6 rounded-r-2xl bg-[#F97316]/[0.03] border-[#F97316]/20">
@@ -69,10 +69,10 @@ const FoundingStory = () => {
                 </div>
 
                 <div className="pt-6 flex items-center gap-4 opacity-20">
-                  <span className="text-[10px] font-bold tracking-[0.5em] uppercase text-white">
+                  <span className="text-[10px] font-bold tracking-[0.5em] uppercase text-muted">
                     Serving Creators Nationwide
                   </span>
-                  <div className="h-px flex-1 bg-white/20"></div>
+                  <div className="h-px flex-1 bg-black/10 dark:bg-white/20"></div>
                 </div>
               </div>
             )
@@ -84,3 +84,5 @@ const FoundingStory = () => {
 };
 
 export default FoundingStory;
+
+

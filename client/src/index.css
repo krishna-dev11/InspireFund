@@ -1,10 +1,126 @@
-﻿@tailwind base;
+@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 body {
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif;
+  background-color: var(--app-bg);
+  color: var(--app-fg);
+  transition: background-color 200ms ease, color 200ms ease;
 }
 
 /* @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 body { font-family: 'Plus Jakarta Sans', sans-serif; } */
+
+:root {
+  --app-bg: #ffffff;
+  --app-fg: #0b0b0b;
+  --app-surface: #ffffff;
+  --app-surface-2: #f8fafc;
+  --app-border: rgba(15, 23, 42, 0.08);
+  --app-muted: #6b7280;
+  --app-accent: #f97316;
+  --app-shadow: 0 20px 60px rgba(15, 23, 42, 0.08);
+  --app-ring: rgba(249, 115, 22, 0.35);
+}
+
+.dark {
+  --app-bg: #000000;
+  --app-fg: #ffffff;
+  --app-surface: #0a0a0a;
+  --app-surface-2: #050505;
+  --app-border: rgba(255, 255, 255, 0.08);
+  --app-muted: #9ca3af;
+  --app-accent: #f97316;
+  --app-shadow: 0 24px 60px rgba(0, 0, 0, 0.65);
+  --app-ring: rgba(249, 115, 22, 0.45);
+}
+
+@layer components {
+  .app-bg {
+    background-color: var(--app-bg);
+    color: var(--app-fg);
+  }
+
+  .app-surface {
+    background-color: var(--app-surface);
+    border: 1px solid var(--app-border);
+  }
+
+  .app-card {
+    background-color: var(--app-surface);
+    border: 1px solid var(--app-border);
+    border-radius: 1.5rem;
+    box-shadow: var(--app-shadow);
+  }
+
+  .app-muted {
+    color: var(--app-muted);
+  }
+
+  .app-accent {
+    color: var(--app-accent);
+  }
+
+  .text-app {
+    color: var(--app-fg);
+  }
+
+  .text-muted {
+    color: var(--app-muted);
+  }
+
+  .bg-surface {
+    background-color: var(--app-surface);
+  }
+
+  .bg-surface-2 {
+    background-color: var(--app-surface-2);
+  }
+
+  .border-app {
+    border-color: var(--app-border);
+  }
+
+  .btn-primary {
+    background-color: var(--app-accent);
+    color: #0b0b0b;
+    border-radius: 1rem;
+    font-weight: 700;
+    transition: transform 200ms ease, opacity 200ms ease, box-shadow 200ms ease;
+  }
+
+  .btn-primary:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+    box-shadow: 0 12px 30px rgba(249, 115, 22, 0.25);
+  }
+
+  .btn-ghost {
+    border: 1px solid var(--app-border);
+    color: var(--app-fg);
+    background: transparent;
+    border-radius: 1rem;
+    font-weight: 600;
+    transition: background 200ms ease, color 200ms ease, border 200ms ease;
+  }
+
+  .btn-ghost:hover {
+    background: rgba(249, 115, 22, 0.08);
+    border-color: rgba(249, 115, 22, 0.35);
+  }
+
+  .input-base {
+    background-color: var(--app-surface-2);
+    border: 1px solid var(--app-border);
+    color: var(--app-fg);
+    border-radius: 1rem;
+    transition: border 200ms ease, box-shadow 200ms ease;
+  }
+
+  .input-base:focus {
+    outline: none;
+    border-color: var(--app-accent);
+    box-shadow: 0 0 0 3px var(--app-ring);
+  }
+}

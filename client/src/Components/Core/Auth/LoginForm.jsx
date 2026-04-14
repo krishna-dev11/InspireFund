@@ -2,9 +2,11 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { Globe, IndianRupee } from "lucide-react";
+import { GoogleLogin } from "@react-oauth/google";
+import { Shield, Sparkles } from "lucide-react";
 import Spinner from "../../Common/Spinner";
-import { login, signup } from "../../../Services/Operations/authAPI";
+import { login, signup, googleLogin } from "../../../Services/Operations/authAPI";
+import showToast from "../../../Utilities/showToast";
 
 function LoginForm({ defaultTab = "login" }) {
   const dispatch = useDispatch();
@@ -37,23 +39,33 @@ function LoginForm({ defaultTab = "login" }) {
     dispatch(signup(payload, navigate));
   };
 
+  const handleGoogle = (credential) => {
+    const payload = { credential };
+    if (tab === "register") payload.role = form.role;
+    dispatch(googleLogin(payload, navigate));
+  };
+
+  const hasGoogle = Boolean(import.meta.env.VITE_GOOGLE_CLIENT_ID);
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-950 via-indigo-900 to-violet-900 flex items-center justify-center p-4">
+    <div className="min-h-screen app-bg flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <div className="w-14 h-14 bg-amber-400 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-amber-500/30">
-            <IndianRupee size={28} className="text-indigo-900" />
+          <div className="w-14 h-14 bg-[#F97316]/15 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-app">
+            <Sparkles size={22} className="text-[#F97316]" />
           </div>
-          <h1 className="text-3xl font-black text-white">FundIndia</h1>
-          <p className="text-indigo-300 mt-1 text-sm">India's Premier Crowdfunding Platform</p>
+          <h1 className="text-3xl font-black text-app">Inspirefund</h1>
+          <p className="text-muted mt-1 text-sm">India's premium crowdfunding platform</p>
         </div>
-        <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
-          <div className="flex border-b border-gray-100">
+        <div className="app-card overflow-hidden">
+          <div className="flex border-b border-app">
             {["login", "register"].map((t) => (
               <button
                 key={t}
                 onClick={() => setTab(t)}
-                className={`flex-1 py-4 text-sm font-bold transition-all ${tab === t ? "text-indigo-700 border-b-2 border-indigo-600" : "text-gray-400"}`}
+                className={`flex-1 py-4 text-sm font-bold transition-all ${
+                  tab === t ? "text-[#F97316] border-b-2 border-[#F97316]" : "text-muted"
+                }`}
               >
                 {t === "login" ? "Sign In" : "Sign Up"}
               </button>
@@ -63,23 +75,23 @@ function LoginForm({ defaultTab = "login" }) {
             {tab === "register" && (
               <>
                 <div>
-                  <label className="text-sm font-semibold text-gray-700 mb-1.5 block">Full Name *</label>
+                  <label className="text-sm font-semibold text-app mb-1.5 block">Full Name *</label>
                   <input
                     value={form.name}
                     onChange={(e) => u("name", e.target.value)}
                     placeholder="Aryan Mehta"
-                    className="w-full border-2 border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:border-indigo-500 outline-none"
+                    className="w-full px-4 py-2.5 input-base text-sm"
                   />
                 </div>
                 <div>
-                  <label className="text-sm font-semibold text-gray-700 mb-1.5 block">Role</label>
+                  <label className="text-sm font-semibold text-app mb-1.5 block">Role</label>
                   <select
                     value={form.role}
                     onChange={(e) => {
                       u("role", e.target.value);
                       setShowAdminSecret(e.target.value === "admin");
                     }}
-                    className="w-full border-2 border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:border-indigo-500 outline-none bg-white"
+                    className="w-full px-4 py-2.5 input-base text-sm bg-surface-2"
                   >
                     <option value="user">User / Backer</option>
                     <option value="creator">Campaign Creator</option>
@@ -88,56 +100,70 @@ function LoginForm({ defaultTab = "login" }) {
                 </div>
                 {showAdminSecret && (
                   <div>
-                    <label className="text-sm font-semibold text-gray-700 mb-1.5 block">Admin Secret Key</label>
+                    <label className="text-sm font-semibold text-app mb-1.5 block">Admin Secret Key</label>
                     <input
                       type="password"
                       value={form.adminSecret}
                       onChange={(e) => u("adminSecret", e.target.value)}
                       placeholder="Enter admin secret"
-                      className="w-full border-2 border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:border-indigo-500 outline-none"
+                      className="w-full px-4 py-2.5 input-base text-sm"
                     />
                   </div>
                 )}
               </>
             )}
             <div>
-              <label className="text-sm font-semibold text-gray-700 mb-1.5 block">Email Address *</label>
+              <label className="text-sm font-semibold text-app mb-1.5 block">Email Address *</label>
               <input
                 value={form.email}
                 onChange={(e) => u("email", e.target.value)}
                 placeholder="you@example.com"
-                className="w-full border-2 border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:border-indigo-500 outline-none"
+                className="w-full px-4 py-2.5 input-base text-sm"
               />
             </div>
             <div>
-              <label className="text-sm font-semibold text-gray-700 mb-1.5 block">Password *</label>
+              <label className="text-sm font-semibold text-app mb-1.5 block">Password *</label>
               <input
                 type="password"
                 value={form.password}
                 onChange={(e) => u("password", e.target.value)}
-                placeholder="••••••••"
-                className="w-full border-2 border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:border-indigo-500 outline-none"
+                placeholder="********"
+                className="w-full px-4 py-2.5 input-base text-sm"
               />
             </div>
             <button
               onClick={submit}
               disabled={loading}
-              className="w-full bg-gradient-to-r from-indigo-600 to-violet-600 text-white py-3.5 rounded-xl font-bold hover:opacity-90 disabled:opacity-60 transition-all shadow-lg shadow-indigo-300 flex items-center justify-center gap-2"
+              className="w-full btn-primary py-3.5 disabled:opacity-60 flex items-center justify-center gap-2"
             >
               {loading ? <Spinner size={18} /> : null}
-              {tab === "login" ? "Sign In ?" : "Create Account ?"}
+              {tab === "login" ? "Sign In" : "Create Account"}
             </button>
-            <div className="text-center text-xs text-gray-400">— or —</div>
-            <button
-              className="w-full border-2 border-gray-200 rounded-xl py-3 flex items-center justify-center gap-2 text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-all opacity-60 cursor-not-allowed"
-              title="Configure GOOGLE_CLIENT_ID in .env to enable"
-            >
-              <Globe size={15} /> Continue with Google (configure in .env)
-            </button>
+
+            <div className="text-center text-xs text-muted">or</div>
+            {hasGoogle ? (
+              <div className="flex justify-center">
+                <GoogleLogin
+                  onSuccess={(credentialResponse) => {
+                    if (credentialResponse?.credential) handleGoogle(credentialResponse.credential);
+                  }}
+                  onError={() => showToast("Google sign-in failed", "error")}
+                  theme="filled_black"
+                  shape="pill"
+                />
+              </div>
+            ) : (
+              <button
+                className="w-full border border-app rounded-xl py-3 flex items-center justify-center gap-2 text-sm font-semibold text-muted opacity-60 cursor-not-allowed"
+                title="Configure VITE_GOOGLE_CLIENT_ID in .env to enable"
+              >
+                <Shield size={15} /> Continue with Google (configure in .env)
+              </button>
+            )}
           </div>
         </div>
-        <p className="text-center text-xs text-indigo-400 mt-4">
-          Backend: <span className="text-amber-400 font-mono">{import.meta.env.VITE_API_URL || "http://localhost:5000"}</span>
+        <p className="text-center text-xs text-muted mt-4">
+          Backend: <span className="text-[#F97316] font-mono">{import.meta.env.VITE_API_URL || "http://localhost:5000"}</span>
         </p>
       </div>
     </div>

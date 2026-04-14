@@ -1,9 +1,9 @@
 function ProgressBar({ value, size = "md" }) {
   const h = size === "sm" ? "h-1.5" : size === "lg" ? "h-3" : "h-2";
   return (
-    <div className={`w-full bg-gray-100 rounded-full ${h} overflow-hidden`}>
+    <div className={`w-full bg-black/10 dark:bg-white/10 rounded-full ${h} overflow-hidden border border-app`}>
       <div
-        className="h-full rounded-full bg-gradient-to-r from-amber-400 to-orange-500 transition-all duration-500"
+        className="h-full rounded-full bg-gradient-to-r from-[#F97316] to-[#FBBF24] transition-all duration-500"
         style={{ width: `${value}%` }}
       />
     </div>

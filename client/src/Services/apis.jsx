@@ -28,4 +28,5 @@ export const endpoints = {
   ADMIN_PENDING_API: BASE_URL + "/api/admin/pending-campaigns",
   ADMIN_APPROVE_API: BASE_URL + "/api/admin/approve",
   ADMIN_REJECT_API: BASE_URL + "/api/admin/reject",
+  ADMIN_SETTINGS_API: BASE_URL + "/api/admin/settings",
 };

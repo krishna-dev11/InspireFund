@@ -21,11 +21,11 @@ function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 font-sans">
+    <div className="min-h-screen app-bg font-sans">
       {showCreateModal && <CreateCampaignModal onClose={handleClose} onCreated={handleCreated} />}
       <Sidebar />
       <Navbar />
-      <main className="transition-all duration-300 pt-16 min-h-screen" style={{ marginLeft: sidebarWidth }}>
+      <main className="transition-all duration-300 pt-20 min-h-screen" style={{ marginLeft: sidebarWidth }}>
         <div className="p-6 max-w-7xl">
           <Outlet />
         </div>
