@@ -18,8 +18,11 @@ import Contributions from "./Pages/Contributions";
 import Profile from "./Pages/Profile";
 import Admin from "./Pages/Admin";
 import CreateCampaign from "./Pages/CreateCampaign";
+import AboutPage from "./Pages/AboutPage";
+import ContactUsPage from "./Pages/ContactUsPage";
 import { initializeAuth } from "./Services/Operations/authAPI";
 import loadRazorpay from "./Utilities/loadRazorpay";
+import Heropage from "./Pages/Heropage";
 
 function App() {
   const dispatch = useDispatch();
@@ -48,6 +51,9 @@ function App() {
       <ToastContainer />
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/contact" element={<ContactUsPage />} />
+        <Route path="/hero" element={<Heropage />} />
 
         <Route
           path="/login"

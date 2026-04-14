@@ -53,7 +53,7 @@ export function login(email, password, navigate) {
       localStorage.setItem("fi_user", JSON.stringify(user));
       setAuthToken(token);
 
-      if (navigate) navigate("/dashboard");
+      if (navigate) navigate("/");
     } catch (error) {
       showToast(error.response?.data?.message || "Authentication failed", "error");
     }
@@ -82,7 +82,7 @@ export function signup(payload, navigate) {
       localStorage.setItem("fi_user", JSON.stringify(user));
       setAuthToken(token);
 
-      if (navigate) navigate("/dashboard");
+      if (navigate) navigate("/");
     } catch (error) {
       showToast(error.response?.data?.message || "Authentication failed", "error");
     }
