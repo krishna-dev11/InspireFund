@@ -33,7 +33,7 @@ const HomePage = () => {
         <meta property="og:description" content="Raise funds or support campaigns across India." />
       </Helmet>
 
-      <div className="mx-auto pb-5 w-[98%] pt-20">
+      <div className="mx-auto pb-5 w-[98%] pt-20 ">
         <HeroSection />
       </div>
 

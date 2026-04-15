@@ -31,11 +31,11 @@ function Sidebar() {
         sidebarCollapsed ? "w-16" : "w-60"
       }`}
     >
-      <div className="flex items-center gap-3 px-4 py-5 border-b border-app">
-        <div className="w-8 h-8 bg-[#F97316]/20 rounded-lg flex items-center justify-center shrink-0">
+      <div  className="flex items-center hover:cursor-pointer gap-3 px-4 py-5 border-b border-app">
+        <div  className="w-8 h-8 bg-[#F97316]/20 rounded-lg flex items-center justify-center shrink-0">
           <IndianRupee size={16} className="text-[#F97316]" />
         </div>
-        {!sidebarCollapsed && <span className="font-black text-app text-lg tracking-tight">Inspirefund</span>}
+        {!sidebarCollapsed && <span onClick={()=>navigate("/")} className="font-black text-app text-lg tracking-tight">Inspirefund</span>}
         <button
           onClick={() => dispatch(setSidebarCollapsed(!sidebarCollapsed))}
           className={`ml-auto text-muted hover:text-[#F97316] ${sidebarCollapsed ? "mx-auto" : ""}`}

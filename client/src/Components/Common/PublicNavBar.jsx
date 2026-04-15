@@ -35,7 +35,7 @@ const PublicNavBar = () => {
   const avatarSrc = user?.imageUrl || user?.avatar || user?.photoURL || "";
 
   return (
-    <div className="w-full h-[72px] fixed z-[1000] transition-all duration-300 bg-white/70 dark:bg-black/70 backdrop-blur-xl border-b border-app">
+    <div className="w-full h-[72px] fixed z-[1000] transition-all duration-300 border-app">
       <div className="flex justify-between items-center w-11/12 mx-auto h-full px-4 md:px-10">
         {/* LOGO */}
         <Link onClick={() => setIsMenuOpen(false)} to={"/"}>
